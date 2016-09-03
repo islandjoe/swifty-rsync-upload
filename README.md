@@ -1,4 +1,4 @@
-# Swift Upload
+# Swifty rsync Upload
 
 Whenever I upload a new post or update my static website I use the tried-and-tested `rsync` (I even made a post about it [here](http://bit.ly/2bToya2)). This is the `rsync` command I type every time:
 
