@@ -1,5 +1,5 @@
 //
-// rsync.swift
+// SwiftUpload.swift
 //
 // MIT License
 // Copyright (c) 2016 Arthur Kho (islandjoe.github.com)
