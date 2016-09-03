@@ -7,14 +7,14 @@
 
 import Foundation
 
-func areWeInBuildDir() -> Bool {
+func areWeInCorrectDir(correctDir: String) -> Bool {
   let currentDir = NSTask().currentDirectoryPath.componentsSeparatedByString("/").last!
-
-  return (currentDir == "Build") 
+  return (currentDir == correctDir) 
 }
 
-func upload(host: String = "compendium.xyz", destination: String = "/srv/www/compendium.xyz") {
+func uploadTo(host: String, destination: String) {
   
+  // To learn what these args do, read it here: http://bit.ly/2bToya2
   let args = ["-avzrO", "--no-perms", "--delete", ".", "\(host):\(destination)", "--exclude='.DS_Store'"]  
   let cmd  = "/usr/bin/rsync"
   
@@ -22,21 +22,27 @@ func upload(host: String = "compendium.xyz", destination: String = "/srv/www/com
   task.launchPath = cmd
   task.arguments  = args
   
-  let pipe = NSPipe()
-  task.standardOutput = pipe
+  let out = NSPipe()
+  task.standardOutput = out
   task.launch()
   
-  let data = pipe.fileHandleForReading.readDataToEndOfFile()
+  let data = out.fileHandleForReading.readDataToEndOfFile()
   if let output = NSString(data: data, encoding: NSUTF8StringEncoding) as? String {
     print(output)
   }
 }
 
-if areWeInBuildDir() {
-  upload()
+// CONFIGURE HERE
+let host = "compendium.xyz"
+let dest = "/srv/www"
+let buildDir = "Build"
+
+
+// MAIN
+if areWeInCorrectDir(buildDir) {
+  uploadTo(host, destination: dest)
 }
 else {
-  print("You are not in 'Build' directory!")
+  print("You are not in '\(buildDir)' directory!")
 }
-
 
