@@ -7,27 +7,27 @@
 
 import Foundation
 
-func areWeInCorrectDir(correctDir: String) -> Bool {
-  let currentDir = NSTask().currentDirectoryPath.componentsSeparatedByString("/").last!
+func areWeInCorrectDir(_ correctDir: String) -> Bool {
+  let currentDir = Process().currentDirectoryPath.components(separatedBy: "/").last!
   return (currentDir == correctDir) 
 }
 
-func uploadTo(host: String, destination: String) {
+func uploadTo(_ host: String, destination: String) {
   
   // To learn what these args do, read it here: http://bit.ly/2bToya2
   let args = ["-avzrO", "--no-perms", "--delete", ".", "\(host):\(destination)", "--exclude='.DS_Store'"]  
   let cmd  = "/usr/bin/rsync"
   
-  let task = NSTask()  
+  let task = Process()  
   task.launchPath = cmd
   task.arguments  = args
   
-  let out = NSPipe()
+  let out = Pipe()
   task.standardOutput = out
   task.launch()
   
   let data = out.fileHandleForReading.readDataToEndOfFile()
-  if let output = NSString(data: data, encoding: NSUTF8StringEncoding) as? String {
+  if let output = String(data: data, encoding: String.Encoding.utf8) {
     print(output)
   }
 }
